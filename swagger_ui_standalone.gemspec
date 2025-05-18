@@ -4,7 +4,7 @@ require_relative "lib/swagger_ui_standalone/version"
 
 Gem::Specification.new do |spec|
   spec.name = "swagger_ui_standalone"
-  spec.version = SwaggerUiStandalone::VERSION
+  spec.version = SwaggerUIStandalone::VERSION
   spec.authors = ["Typist Tech Limited", "Tang Rufus"]
   spec.email = ["opensource+swagger_ui_standalone@typist.tech", "tangrufus@gmail.com"]
 
@@ -33,4 +33,13 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_dependency "octokit", "~> 4.0"
+  spec.add_dependency "base64" # For octokit
+  spec.add_dependency "faraday-retry", "~> 2.3" # For octokit
+
+  spec.add_dependency "down", "~> 5.4"
+  spec.add_dependency "rubyzip", "~> 2.4"
+
+  spec.add_dependency "thor", "~> 1.3"
 end

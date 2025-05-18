@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "swagger_ui_standalone/cli"
+
+SwaggerUIStandalone::CLI.start(ARGV)

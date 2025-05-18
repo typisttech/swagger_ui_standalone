@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 require "swagger_ui_standalone"
+require "swagger_ui_standalone/cli"
+
+require_relative "support/eq_dir"
+require_relative "support/eq_zip"
+require_relative "support/file_fixture"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

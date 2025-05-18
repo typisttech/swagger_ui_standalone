@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe SwaggerUiStandalone do
+RSpec.describe SwaggerUIStandalone do
   it "has a version number" do
-    expect(SwaggerUiStandalone::VERSION).not_to be nil
+    expect(SwaggerUIStandalone::VERSION).not_to be nil
   end
 end
