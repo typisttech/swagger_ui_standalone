@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  release:
+    types:
+     - published
+
+jobs:
+  release:
+    permissions:
+      id-token: write
+    environment: rubygems.org
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Configure trusted publishing credentials
+        uses: rubygems/configure-rubygems-credentials@bc6dd217f8a4f919d6835fcfefd470ef821f5c44
+        with:
+          role-to-assume: 3
+
+      - run: bundle exec rake release
+
+      - name: Wait for release to propagate
+        run: gem exec rubygems-await pkg/*.gem
