@@ -11,8 +11,8 @@ jobs:
   push:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       id-token: write
+    environment: rubygems.org
     steps:
       - uses: rubygems/configure-rubygems-credentials@e3f5097339179e0d4c7321ab44209e7e02446746
         with:
