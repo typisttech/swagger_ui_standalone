@@ -25,8 +25,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.RUBYGEMS_ORG_OCID }}
 
-      - name: Release
-        run: bundle exec rake release
+      - run: bundle exec rake release
 
       - name: Wait for release to propagate
         run: |
