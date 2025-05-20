@@ -4,13 +4,10 @@ require "zip"
 
 module SwaggerUIStandalone
   module Zipball
-    def extract(path, content_directory:, destination_directory:)
-      pattern = "*/#{content_directory}/**"
-      prefix = "#{content_directory}/"
-
+    def extract(path, pattern:, destination_directory:)
       Zip::File.open(path) do |zip_file|
         zip_file.glob(pattern).each do |entry|
-          i = entry.name.index(prefix) + prefix.length
+          i = entry.name.index("/") + 1
           entry_path = entry.name[i..]
 
           full_destination_path = File.join(destination_directory, entry_path)
