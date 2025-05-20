@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "octokit", "~> 4.0"
+  spec.add_dependency "octokit", ">= 4", "< 11"
   spec.add_dependency "base64" # For octokit
   spec.add_dependency "faraday-retry", "~> 2.3" # For octokit
 
