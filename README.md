@@ -1,43 +1,174 @@
-# SwaggerUIStandalone
+<div align="center">
 
-TODO: Delete this and the text below, and describe your gem
+# Swagger UI Standalone
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/swagger_ui_standalone`. To experiment with that code, run `bin/console` for an interactive prompt.
+[![Gem Version](https://img.shields.io/gem/v/swagger_ui_standalone)](https://badge.fury.io/rb/swagger_ui_standalone)
+[![Ruby](https://github.com/typisttech/swagger_ui_standalone/actions/workflows/main.yml/badge.svg)](https://github.com/typisttech/swagger_ui_standalone/actions/workflows/main.yml)
+[![License](https://img.shields.io/github/license/typisttech/swagger_ui_standalone.svg)](https://github.com/typisttech/swagger_ui_standalone/blob/master/LICENSE.txt)
+[![Follow @TangRufus on X](https://img.shields.io/badge/Follow-TangRufus-15202B?logo=x&logoColor=white)](https://x.com/tangrufus)
+[![Follow @TangRufus.com on Bluesky](https://img.shields.io/badge/Bluesky-TangRufus.com-blue?logo=bluesky)](https://bsky.app/profile/tangrufus.com)
+[![Sponsor @TangRufus via GitHub](https://img.shields.io/badge/Sponsor-TangRufus-EA4AAA?logo=githubsponsors)](https://github.com/sponsors/tangrufus)
+[![Hire Typist Tech](https://img.shields.io/badge/Hire-Typist%20Tech-778899)](https://typist.tech/contact/)
+
+<p>
+  <strong>Generate standalone static Swagger UI sites from OpenAPI specifications.</strong>
+  <br>
+  <br>
+  Built with ♥ by <a href="https://typist.tech/">Typist Tech</a>
+</p>
+
+</div>
+
+---
+
+## Quick Start
+
+```bash
+# Install the gem
+gem install swagger_ui_standalone
+
+# Prepare some custom files
+mkdir custom
+
+## Download some OpenAPI specifications
+wget https://raw.githubusercontent.com/github/rest-api-description/refs/heads/main/descriptions/api.github.com/api.github.com.yaml -O custom/github.yaml
+wget https://validator.swagger.io/validator/openapi.json -O custom/validator.yaml
+
+## Make a disallow all robots.txt file
+cat > custom/robots.txt <<EOF
+User-agent: *
+Disallow: /
+EOF
+
+## Create custom swagger-initializer.js to override the default file
+cat > custom/swagger-initializer.js <<EOF
+window.onload = function() {
+  window.ui = SwaggerUIBundle({
+    urls: [
+      {name: "GitHub", url: "github.yaml"},
+      {name: "Validator", url: "validator.yaml"},
+      {name: "Petstore (External)", url: "https://petstore.swagger.io/v2/swagger.json"},
+    ],
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout"
+  });
+};
+EOF
+
+# Generate a standalone static Swagger UI site into the output directory
+swagger_ui_standalone generate --custom custom --output output
+```
+
+The `generate` command downloads the latest release of Swagger UI from GitHub and copy the `dist` directory to the `output` directory. 
+Then, the `custom` directory is copied as is, so you can add or overwrite files in the `output` directory.
+
+```console
+$ tree custom output
+custom
+├── github.yaml
+├── robots.txt
+├── swagger-initializer.js
+└── validator.yaml
+output
+├── favicon-16x16.png
+├── favicon-32x32.png
+├── github.yaml
+├── index.css
+├── index.html
+├── oauth2-redirect.html
+├── robots.txt
+├── swagger-initializer.js
+├── swagger-ui-bundle.js
+├── swagger-ui-bundle.js.map
+├── swagger-ui-es-bundle-core.js
+├── swagger-ui-es-bundle-core.js.map
+├── swagger-ui-es-bundle.js
+├── swagger-ui-es-bundle.js.map
+├── swagger-ui-standalone-preset.js
+├── swagger-ui-standalone-preset.js.map
+├── swagger-ui.css
+├── swagger-ui.css.map
+├── swagger-ui.js
+├── swagger-ui.js.map
+└── validator.yaml
+
+# Start a local web server to serve the static site with webrick
+# See https://gist.github.com/willurd/5720255 for alternatives
+$ gem install webrick
+$ ruby -run -ehttpd output -p8000
+```
+
+## Usage
+
+### `generate`
+
+```console
+$ swagger_ui_standalone help generate
+Usage:
+  swagger_ui_standalone generate [options] --custom=DIRECTORY --output=DIRECTORY
+
+Options:
+  --custom=DIRECTORY      # Path to the directory containing custom files, which will be copied to the output directory
+  --output=DIRECTORY      # Where to write the generated files
+  [--repo=OWNER/REPO]     # GitHub repository to download in the format <owner/repo>
+                          # Default: swagger-api/swagger-ui
+  [--ref=TAG|BRANCH|SHA]  # Git reference to download (can be a tag, branch or commit SHA). Omit to use the latest release
+  [--force]               # Overwrite files that already exist
+
+Generate standalone static Swagger UI
+```
+
+### `download`
+
+```console
+$ swagger_ui_standalone help download
+Usage:
+  swagger_ui_standalone download [options] --output=DIRECTORY
+
+Options:
+  --output=DIRECTORY      # Where to write the generated files
+  [--repo=OWNER/REPO]     # GitHub repository to download in the format <owner/repo>
+                          # Default: swagger-api/swagger-ui
+  [--ref=TAG|BRANCH|SHA]  # Git reference to download (can be a tag, branch or commit SHA). Omit to use the latest release
+  [--force]               # Overwrite files that already exist
+
+Download standalone static Swagger UI source code
+```
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+bundle add swagger_ui_standalone
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem install swagger_ui_standalone
 ```
 
-## Usage
+## Credits
 
-TODO: Write usage instructions here
+[`Swagger UI Standalone`](https://github.com/typisttech/swagger_ui_standalone) is a [Typist Tech](https://typist.tech) project and
+maintained by [Tang Rufus](https://x.com/TangRufus), freelance developer [for hire](https://typist.tech/contact/).
 
-## Development
+Full list of contributors can be found [on GitHub](https://github.com/typisttech/swagger_ui_standalone/graphs/contributors).
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Copyright and License
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+This project is a [free software](https://www.gnu.org/philosophy/free-sw.en.html) distributed under the terms of
+the MIT license. For the full license, see [LICENSE](./LICENSE.txt).
 
-## Contributing
+## Contribute
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/swagger_ui_standalone. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/swagger_ui_standalone/blob/main/CODE_OF_CONDUCT.md).
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the SwaggerUIStandalone project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/swagger_ui_standalone/blob/main/CODE_OF_CONDUCT.md).
+Feedbacks / bug reports / pull requests are welcome.

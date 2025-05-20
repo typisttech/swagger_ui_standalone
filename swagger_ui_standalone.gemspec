@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Typist Tech Limited", "Tang Rufus"]
   spec.email = ["opensource+swagger_ui_standalone@typist.tech", "tangrufus@gmail.com"]
 
-  spec.summary = "Generate standalone static SwaggerUI sites from OpenAPI specifications."
+  spec.summary = "Generate standalone static Swagger UI sites from OpenAPI specifications."
   spec.homepage = "https://github.com/typisttech/swagger_ui_standalone"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
