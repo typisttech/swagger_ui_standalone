@@ -1,31 +1,38 @@
 name: Release
 
 on:
-  release:
-    types:
-     - published
+  push:
+    tags:
+      - "*"
 
 permissions: {}
 
 jobs:
-  release:
+  push:
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
     environment: rubygems.org
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          ruby-version: ruby
 
-      - name: Configure trusted publishing credentials
-        uses: rubygems/configure-rubygems-credentials@bc6dd217f8a4f919d6835fcfefd470ef821f5c44
+      - uses: rubygems/configure-rubygems-credentials@e3f5097339179e0d4c7321ab44209e7e02446746
         with:
-          role-to-assume: 3
+          role-to-assume: ${{ secrets.RUBYGEMS_ORG_OCID }}
 
       - run: bundle exec rake release
 
       - name: Wait for release to propagate
-        run: gem exec rubygems-await pkg/*.gem
+        run: |
+          gem install rubygems-await
+          gem_tuple="$(ruby -rbundler/setup -rbundler -e '
+              spec = Bundler.definition.specs.find {|s| s.name == ARGV[0] }
+              raise "No spec for #{ARGV[0]}" unless spec
+              print [spec.name, spec.version, spec.platform].join(":")
+            ' "swagger_ui_standalone")"
+          gem await "${gem_tuple}"
