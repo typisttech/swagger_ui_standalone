@@ -7,6 +7,8 @@ module SwaggerUIStandalone
     def extract(path, pattern:, destination_directory:)
       Zip::File.open(path) do |zip_file|
         zip_file.glob(pattern).each do |entry|
+          # Remove the leading directory from the entry name
+          # e.g. "swagger-api-swagger-ui-3c4e5b7/dist/index.html" --> "dist/index.html"
           i = entry.name.index("/") + 1
           entry_path = entry.name[i..]
 

@@ -42,7 +42,7 @@ module SwaggerUIStandalone
         desc: "Overwrite files that already exist"
     end
 
-    desc "generate [options]", "Generate standalone static SwaggerUI"
+    desc "generate [options]", "Generate standalone static Swagger UI"
     option :custom,
       type: :string,
       desc: "Path to the directory containing custom files, which will be copied to the output directory",
@@ -52,6 +52,7 @@ module SwaggerUIStandalone
 
     def generate
       Dir.mktmpdir do |tmp_dir|
+        # We only want the dist directory.
         tmp_dist_dir = File.join(tmp_dir, DIST_DIR)
 
         SwaggerUIStandalone.download_source tmp_dir, repo: options.repo, ref: options.ref
@@ -61,13 +62,14 @@ module SwaggerUIStandalone
       end
     end
 
-    desc "download [options]", "Download standalone static SwaggerUI source code"
+    desc "download [options]", "Download standalone static Swagger UI source code"
     define_download_options
 
     def download
       Dir.mktmpdir do |tmp_dir|
         SwaggerUIStandalone.download_source tmp_dir, repo: options.repo, ref: options.ref
 
+        # We only want the dist directory.
         copy_directory File.join(tmp_dir, DIST_DIR), options.output, recursive: true, force: options.force, verbose: true
       end
     end
