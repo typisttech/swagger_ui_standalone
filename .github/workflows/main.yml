@@ -22,7 +22,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - run: bundle exec standardrb
+      - run: bundle exec standardrb --format github --format "Standard::Formatter"
 
   test:
     runs-on: ubuntu-latest
