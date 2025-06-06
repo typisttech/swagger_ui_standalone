@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Generate standalone static Swagger UI sites from OpenAPI specifications."
   spec.homepage = "https://github.com/typisttech/swagger_ui_standalone"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.2.0"
+  spec.required_ruby_version = ">= 3.4.4"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
